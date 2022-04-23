@@ -133,7 +133,7 @@ if (isset($_POST['get_life_expectancy'])){
     
 
 
-    $result = diff_lang_join($conn, $first_country,$second_country);
+    $result = aggregate_countries($conn, $agg_type,$country_name);
     echo "Returned rows are: " . mysqli_num_rows($result);
     print_table('aggregate_countries', $result);
     mysqli_free_result($result);

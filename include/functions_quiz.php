@@ -107,7 +107,12 @@ function aggregate_countries($conn,$agg_type, $country_name){
     ########
     #Please enter your code here
     $query_string = 
-    ""
+    "select Name, LifeExpectancy, GovernmentForm, countrylanguage.Language
+    from country, countrylanguage
+    where country.Code = countrylanguage.CountryCode and countrylanguage.IsOfficial = \"T\" and
+    LifeExpectancy > (Select $agg_type(c.LifeExpectancy) from country as c) and 
+    LifeExpectancy < (Select c2.LifeExpectancy from country as c2 where c2.Name = \"$country_name\")";
+
     if($result = mysqli_query($conn, $query_string )){
         return $result;
     }
