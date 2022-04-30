@@ -120,6 +120,72 @@ function aggregate_countries($conn,$agg_type, $country_name){
     return $result;
 }
 
+function find_min_max_continent($conn){
+
+    $result = Null;
+    ########
+    #Please enter your code here
+    $query_string = 
+    "select countries.Name, countries.Continent, countries.LifeExpectancy from (select c2.Name, c2.LifeExpectancy, c2.Continent
+    from country as c2 
+    JOIN (select MAX(c3.LifeExpectancy) as maxLE,  c3.Continent as Continent from country as c3
+    group by c3.Continent order by c3.continent) max on max.maxLE = c2.LifeExpectancy and max.Continent = c2.Continent
+    UNION
+    select c2.Name, c2.LifeExpectancy, c2.Continent
+    from country as c2 
+    JOIN (select MIN(c3.LifeExpectancy) as maxLE,  c3.Continent as Continent from country as c3
+    group by c3.Continent order by c3.continent) max on max.maxLE = c2.LifeExpectancy and max.Continent = c2.Continent)
+    as countries
+    order by countries.Name
+    ";
+
+    if($result = mysqli_query($conn, $query_string )){
+        return $result;
+    }
+    ########
+    return $result;
+}
+
+function find_country_language($conn,$percentage, $language){
+
+    $result = Null;
+    ########
+    #Please enter your code here
+    $query_string = 
+    "select Name, Language, Percentage
+    from country, countrylanguage
+    where Language = \"$language\" and country.Code = countryLanguage.CountryCode
+    having Percentage > $percentage";
+
+    if($result = mysqli_query($conn, $query_string )){
+        return $result;
+    }
+    ########
+    return $result;
+}
+
+function find_country_count($conn,$amount){
+
+    $result = Null;
+    ########
+    #Please enter your code here
+    $query_string = 
+    "select c2.Name, c2.LifeExpectancy, c2.Continent
+    from country as c2 
+    JOIN (select MAX(c3.LifeExpectancy) as maxLE,  c3.Continent as Continent from (select country.*
+    from country, city
+    where country.Code = city.countryCode
+    group by city.countryCode
+    having count(city.countryCode) > $amount) as c3 group by c3.Continent order by c3.continent) max on max.maxLE = c2.LifeExpectancy and max.Continent = c2.Continent
+    ";
+
+    if($result = mysqli_query($conn, $query_string )){
+        return $result;
+    }
+    ########
+    return $result;
+}
+
 
 
 function print_table($table_name, $result){
@@ -231,7 +297,111 @@ function print_table($table_name, $result){
 
         echo "</table>";
     }
+
+    else if ($table_name === 'find_min_max_continent'){
+
+        ?><br>
+
+        <table border='1'>
+
+        <tr>
+
+        <th>Name</th>
+
+        <th>Continent</th>
+
+        <th>LifeExpectancy</th>
+
+        </tr>
+
+        <?php
+
+
+        foreach($result as $row){
+
+            echo "<tr>";
+
+            echo "<td>" . $row['Name'] . "</td>";
+            
+            echo "<td>" . $row['Continent'] . "</td>";
+
+            echo "<td>" . $row['LifeExpectancy'] . "</td>";
+
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    }
+
+    else if ($table_name === 'find_country_language'){
+
+        ?><br>
+
+        <table border='1'>
+
+        <tr>
+
+        <th>Name</th>
+
+        <th>Language</th>
+
+        <th>Percentage</th>
+
+        </tr>
+
+        <?php
+
+
+        foreach($result as $row){
+
+            echo "<tr>";
+
+            echo "<td>" . $row['Name'] . "</td>";
+            
+            echo "<td>" . $row['Language'] . "</td>";
+
+            echo "<td>" . $row['Percentage'] . "</td>";
+
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    }
     
+    else if ($table_name === 'find_country_count'){
+
+        ?><br>
+
+        <table border='1'>
+
+        <tr>
+
+        <th>Name</th>
+
+        <th>LifeExpectancy</th>
+
+        <th>Continent</th>
+
+        </tr>
+
+        <?php
+
+
+        foreach($result as $row){
+
+            echo "<tr>";
+
+            echo "<td>" . $row['Name'] . "</td>";
+            
+            echo "<td>" . $row['LifeExpectancy'] . "</td>";
+
+            echo "<td>" . $row['Continent'] . "</td>";
+
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    }
 
 }
 

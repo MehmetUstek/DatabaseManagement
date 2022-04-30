@@ -58,7 +58,25 @@
     </form>
     <hr>
     <!-- No GUI necessary for Question 5 -->
+    <!-- Still, I made a GUI for Question 5 and it follows below -->
 
+    <form action='result_quiz.php' method='post'>
+        <input name="find_min_max_continent", value='Find Min Max Continent' type='submit'/></p>
+    </form>
+    <hr>
+
+    <form action='result_quiz.php' method='post'>
+        <label>Percentage:        </label><input type='text' name='percentage' /><br/>
+        <label>Language:        </label><input type='text' name='language' /><br/>
+        <input name="find_country_language", value='Find Country Language' type='submit'/></p>
+    </form>
+    <hr>
+
+    <form action='result_quiz.php' method='post'>
+        <label>Amount:        </label><input type='text' name='amount' /><br/>
+        <input name="find_country_count", value='Find Country Count' type='submit'/></p>
+    </form>
+    <hr>
 
 </body>
 </html>

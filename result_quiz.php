@@ -138,3 +138,37 @@ if (isset($_POST['get_life_expectancy'])){
     print_table('aggregate_countries', $result);
     mysqli_free_result($result);
 }
+
+/// Find Min Max Continent
+if (isset($_POST['find_min_max_continent'])){
+
+    $result = find_min_max_continent($conn,);
+    echo "Returned rows are: " . mysqli_num_rows($result);
+    print_table('find_min_max_continent', $result);
+    mysqli_free_result($result);
+}
+
+/// Find Country Language
+if (isset($_POST['find_country_language'])){
+
+    $percentage = $_POST["percentage"];
+    $language = $_POST["language"];
+    
+
+    $result = find_country_language($conn, $percentage,$language);
+    echo "Returned rows are: " . mysqli_num_rows($result);
+    print_table('find_country_language', $result);
+    mysqli_free_result($result);
+}
+
+/// Find Country Count
+if (isset($_POST['find_country_count'])){
+
+    $amount = $_POST["amount"];
+    
+
+    $result = find_country_count($conn, $amount);
+    echo "Returned rows are: " . mysqli_num_rows($result);
+    print_table('find_country_count', $result);
+    mysqli_free_result($result);
+}
